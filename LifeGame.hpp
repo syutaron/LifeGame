@@ -2,12 +2,13 @@
 #include <vector>
 #include <random>
 #include <array>
+#include <iostream>
 
 class LifeGame
 {
 public:
 
-	static constexpr int BOARD_SIZE = 500;
+	static constexpr int BOARD_SIZE = 1024;
 
 //	using Board = std::vector<std::vector<bool>>;
  	using Board = bool**;
@@ -24,6 +25,8 @@ public:
 	void initByRand();
 	void update();
 	int countAroundCell(int x, int y);
+	bool at(size_t x, size_t y) const;
+	void set(size_t x, size_t y);
 	~LifeGame();
 
 	bool first_count;

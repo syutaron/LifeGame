@@ -8,6 +8,8 @@ LifeGame::LifeGame()
 	//, board(BOARD_SIZE + 2, std::vector<bool>(BOARD_SIZE + 2, false))
 	//, back_buffer(BOARD_SIZE + 2, std::vector<bool>(BOARD_SIZE + 2, false))
 	, mt(rand())
+	, around_cell_cache(0)
+	, first_count(false)
 {
 	board = new bool*[BOARD_SIZE + 2];
 	back_buffer = new bool*[BOARD_SIZE + 2];
@@ -16,7 +18,16 @@ LifeGame::LifeGame()
 		board[i] = new bool[BOARD_SIZE + 2];
 		back_buffer[i] = new bool[BOARD_SIZE + 2];
 	}
-	initByRand();
+
+	for (int y = 0; y < BOARD_SIZE + 2; y++)
+	{
+		for (int x = 0; x < BOARD_SIZE + 2; x++)
+		{
+			board[y][x] = false;
+			back_buffer[y][x] = false;
+		}
+	}
+	// initByRand();
 }
 
 LifeGame::~LifeGame()
@@ -66,7 +77,17 @@ void LifeGame::initByRand()
 	}
 }
 
-/*int LifeGame::countAroundCell(int x, int y)
+bool LifeGame::at(size_t x, size_t y) const
+{
+	return board[y + 1][x + 1];
+}
+
+void LifeGame::set(size_t x, size_t y)
+{
+	board[y + 1][x + 1] = true;
+}
+
+int LifeGame::countAroundCell(int x, int y)
 {
 	int c = 0;
 	for (int j = y - 1; j <= y + 1; j++)
@@ -74,19 +95,20 @@ void LifeGame::initByRand()
 		for (int i = x - 1; i <= x + 1; i++)
 		{
 			profile_ref_count++;
-			if (x == 0 && y == 0)
+			if (x == i && y == j)
 			{
 				continue;
 			}
-			c += static_cast<int>(board[j][i]);
+			if (board[j][i])
+				c++;
 		}
 	}
 
 	return c;
-}*/
+}
 
 
-int LifeGame::countAroundCell(int x, int y)
+/*int LifeGame::countAroundCell(int x, int y)
 {
 	if (first_count)
 	{
@@ -96,7 +118,7 @@ int LifeGame::countAroundCell(int x, int y)
 			for (int i = x - 1; i <= x + 1; i++)
 			{
 				profile_ref_count++;
-				if (x == 0 && y == 0)
+				if (x == i && y == j)
 				{
 					continue;
 				}
@@ -120,4 +142,4 @@ int LifeGame::countAroundCell(int x, int y)
 	}
 
 	return around_cell_cache;
-}
+}*/
